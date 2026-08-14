@@ -13,6 +13,7 @@ Status: **research & planning.** No code yet.
 | [`docs/RESEARCH.md`](docs/RESEARCH.md) | What MOSS is, a reverse-engineered log grammar, the six-clock timestamp model, per-game analysis (Rainbow Six / Valorant / Call of Duty), findings from five real archives, and MOSS's documented blind spots |
 | [`docs/PLAN.md`](docs/PLAN.md) | Positioning, three-tier finding model, feature set, architecture, phased roadmap, risks |
 | [`docs/QUESTIONS.md`](docs/QUESTIONS.md) | Open questions, blocking ones first, with working assumptions marked |
+| [`docs/DECISIONS.md`](docs/DECISIONS.md) | Confirmed direction and its consequences; supersedes the assumptions in QUESTIONS.md |
 
 ## The short version
 
