@@ -1,0 +1,7 @@
+# The site is built from source at deploy time; nothing else needs uploading.
+demo/
+site/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
+*.egg-info/

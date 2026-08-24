@@ -172,11 +172,23 @@ docs/            research, plan, decisions, open questions, operations
 ## Development
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 113 tests, no network, no fixtures on disk
-ruff check src tests && mypy src
+python3 -m unittest discover -s tests -t .   # 129 tests, no network, no fixtures on disk
+ruff check src tests scripts && mypy src
 make check                                   # all of the above
 make demo                                    # build a synthetic match and report on it
+make serve                                   # build the docs site and serve it on :8000
 ```
+
+## The site
+
+`scripts/build_site.py` builds a static site — landing page, the documents in `docs/`
+rendered to HTML, and **live sample reports produced by running the real tool over synthetic
+archives**. There is no server and no framework: the output directory is the site, the same
+way the report file is the case document. `vercel.json` builds it on deploy; any static host
+or a USB stick at a LAN works the same way.
+
+Sample pages carry a banner saying their data is synthetic. A forensic report that looks
+genuine but is not must never be mistakable for one.
 
 ## Documents
 

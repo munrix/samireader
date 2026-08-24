@@ -59,7 +59,7 @@ PLAYERS = [
 ]
 
 
-def main(directory: str = "demo") -> int:
+def main(directory: str = "demo", *, verbose: bool = True) -> int:
     out = Path(directory)
     archives = out / "archives"
     archives.mkdir(parents=True, exist_ok=True)
@@ -69,7 +69,8 @@ def main(directory: str = "demo") -> int:
         built[name] = Synth(
             directory=archives, user=name, seed=7 + index, nonce=str(100000000 + index), **options
         ).build()
-        print(f"built {name:15} {built[name].name}")
+        if verbose:
+            print(f"built {name:15} {built[name].name}")
 
     schedule = {
         "match_id": "DEMO-QF1",
@@ -90,7 +91,8 @@ def main(directory: str = "demo") -> int:
         + [{"name": "never-submitted", "team": "Thermite", "archive": "missing.zip"}],
     }
     (out / "schedule.json").write_text(json.dumps(schedule, indent=2), encoding="utf-8")
-    print(f"schedule written to {out / 'schedule.json'}")
+    if verbose:
+        print(f"schedule written to {out / 'schedule.json'}")
     return 0
 
 

@@ -1,4 +1,4 @@
-.PHONY: help test lint types check demo clean install
+.PHONY: help test lint types check site serve demo clean install
 
 PY ?= python3
 export PYTHONPATH := src
@@ -13,12 +13,18 @@ test:  ## run the full test suite (no network, no fixtures on disk)
 	$(PY) -m unittest discover -s tests -t . -q
 
 lint:  ## ruff
-	ruff check src tests conftest.py
+	ruff check src tests scripts conftest.py
 
 types:  ## mypy
 	mypy src
 
 check: lint types test  ## everything CI would run
+
+site:  ## build the static site (landing page, docs, sample reports) into site/
+	$(PY) scripts/build_site.py site
+
+serve: site  ## build the site and serve it locally on :8000
+	cd site && $(PY) -m http.server 8000
 
 demo:  ## build a synthetic match and produce reports for it in demo/
 	$(PY) scripts/make_demo.py demo
@@ -27,4 +33,4 @@ demo:  ## build a synthetic match and produce reports for it in demo/
 	@echo "open demo/report/index.html"
 
 clean:
-	rm -rf demo build dist .mypy_cache .ruff_cache **/__pycache__
+	rm -rf demo site build dist .mypy_cache .ruff_cache **/__pycache__
