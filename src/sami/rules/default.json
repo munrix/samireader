@@ -1,0 +1,176 @@
+{
+  "name": "samireader default",
+  "version": "1",
+  "notes": [
+    "Conservative public defaults. Leagues should layer a private overlay pack with",
+    "their own thresholds and hash lists (docs/OPERATIONS.md), because anything shipped",
+    "here is known to anyone who wants to evade it (PLAN section 7).",
+    "Every threshold that came from the vendor's own published guidance is marked."
+  ],
+
+  "disabled_rules": [],
+  "severity": {},
+
+  "integrity": {
+    "expected_log_name": "Logfile.log",
+    "screenshot_extensions": [".jpg", ".jpeg"],
+    "config_prefixes": ["GameSettings.ini"],
+    "allow_extra_members": []
+  },
+
+  "zip": {
+    "mtime_uniformity_ratio": 0.9,
+    "min_entries_for_structure_checks": 6,
+    "expected_compress_types": [8],
+    "mtime_after_log_tolerance_s": 120
+  },
+
+  "clocks": {
+    "offset_tolerance_minutes": 3,
+    "network_clock_expected_offset_minutes": 60,
+    "network_clock_tolerance_minutes": 5,
+    "drift_tolerance_minutes": 2,
+    "boot_time_tolerance_s": 900,
+    "archive_name_tolerance_s": 900
+  },
+
+  "session": {
+    "max_screenshot_gap_s": 300,
+    "min_screenshots": 5,
+    "min_duration_s": 300,
+    "cadence_regularity_cv": 0.05,
+    "monitor_start_to_first_shot_max_s": 900
+  },
+
+  "schedule": {
+    "start_margin_s": null,
+    "end_margin_s": null,
+    "stale_archive_days": 1
+  },
+
+  "environment": {
+    "suspicious_path_fragments": [
+      "\\appdata\\local\\temp\\",
+      "\\windows\\temp\\",
+      "\\downloads\\",
+      "\\desktop\\",
+      "\\recycle.bin\\",
+      "\\programdata\\temp\\"
+    ],
+    "unsigned_ignore": [
+      "system32\\", "syswow64\\", "\\windows\\winsxs\\"
+    ],
+    "known_bad_sha256": [],
+    "categories": {
+      "remote_access": [
+        "anydesk.exe", "parsec.exe", "parsecd.exe", "rustdesk.exe", "teamviewer.exe",
+        "tv_w32.exe", "tv_x64.exe", "vncserver.exe", "winvnc.exe", "tightvnc.exe",
+        "ultravnc.exe", "dwagent.exe", "supremo.exe", "ammyy.exe", "aa_v3.exe",
+        "chrome_remote_desktop.exe", "remotepc.exe", "splashtop.exe", "sunloginclient.exe",
+        "todesk.exe", "quickassist.exe", "mstsc.exe", "moonlight.exe", "sunshine.exe"
+      ],
+      "macro_suite": [
+        "autohotkey.exe", "autohotkeyu64.exe", "autohotkey64.exe", "ahk.exe",
+        "lghub.exe", "lghub_agent.exe", "logitech gaming software.exe", "lcore.exe",
+        "razer synapse.exe", "razer synapse 3.exe", "rzsynapse.exe",
+        "rewasd.exe", "rewasdengine.exe", "xmbc.exe", "joytokey.exe",
+        "macrorecorder.exe", "pulover's macro creator.exe", "tinytask.exe",
+        "bloody7.exe", "bloody6.exe", "oscarmouseeditor.exe", "corsair.service.exe",
+        "icue.exe", "keran.exe", "gtuner.exe", "cronusghost.exe", "zen.exe"
+      ],
+      "virtual_machine": [
+        "vmtoolsd.exe", "vboxservice.exe", "vboxtray.exe", "vmwaretray.exe",
+        "vmwareuser.exe", "vmusrvc.exe", "vmsrvc.exe", "qemu-ga.exe",
+        "prl_tools.exe", "prl_cc.exe", "xenservice.exe", "vmmem"
+      ],
+      "spoofer_or_cleaner": [
+        "hwidspoofer.exe", "spoofer.exe", "cleaner.exe", "tracecleaner.exe",
+        "amidewinx64.exe", "amidewin.exe", "volumeid.exe", "diskgenius.exe"
+      ],
+      "overlay_or_injector": [
+        "overwolf.exe", "overwolfhelper.exe", "obs64.exe", "obs32.exe",
+        "streamlabs obs.exe", "rtsshooksloader64.exe", "rtss.exe",
+        "msiafterburner.exe", "discordhook64.exe", "nvidia share.exe",
+        "gyazovideocore.exe", "medal.exe", "outplayed.exe", "xsplit.core.exe"
+      ],
+      "debugger_or_memory_tool": [
+        "cheatengine-x86_64.exe", "cheatengine-i386.exe", "x64dbg.exe", "x32dbg.exe",
+        "ollydbg.exe", "ida64.exe", "ida.exe", "processhacker.exe", "systeminformer.exe",
+        "windbg.exe", "scylla_x64.exe", "extremeinjector.exe", "xenos64.exe",
+        "artmoney.exe", "hxd.exe"
+      ],
+      "capture_or_share": [
+        "discord.exe", "obs64.exe", "chrome.exe", "msedge.exe", "firefox.exe",
+        "steam.exe", "vlc.exe", "spotify.exe"
+      ]
+    },
+    "category_severity": {
+      "remote_access": "high",
+      "macro_suite": "medium",
+      "virtual_machine": "high",
+      "spoofer_or_cleaner": "high",
+      "overlay_or_injector": "low",
+      "debugger_or_memory_tool": "high",
+      "capture_or_share": "info"
+    },
+    "expect_real_os": "Windows 10 or 11",
+    "expect_defender": "enabled"
+  },
+
+  "config": {
+    "vulkan_layer_allowlist": [
+      "VK_LAYER_OW_OBS_HOOK",
+      "VK_LAYER_OW_OVERLAY",
+      "VK_LAYER_VALVE_steam_overlay",
+      "VK_LAYER_VALVE_steam_fossilize",
+      "VK_LAYER_NV_optimus",
+      "VK_LAYER_AMD_switchable_graphics",
+      "VK_LAYER_EOS_Overlay",
+      "VK_LAYER_EPIC_vulkan_overlay",
+      "VK_LAYER_OBS_HOOK",
+      "VK_LAYER_MESA_device_select",
+      "VK_LAYER_INTEL_nullhw",
+      "VK_LAYER_NV_nomad_release_public"
+    ],
+    "numeric_ranges": {
+      "MouseSensitivityMultiplierUnit": [0.0, 100.0],
+      "DefaultFOV": [60.0, 90.0],
+      "RenderScaling": [50.0, 100.0]
+    },
+    "flag_keys": {
+      "Console": "1"
+    },
+    "profile_count_review_threshold": 5,
+    "compare_keys": [
+      "VulkanWhitelistedLayers",
+      "DefaultFOV",
+      "RefreshRate",
+      "GPUAdapterInfo",
+      "Console"
+    ]
+  },
+
+  "screenshots": {
+    "blank_frame_size_ratio": 0.4,
+    "blank_frame_min_median_bytes": 20000,
+    "duplicate_run_length": 3,
+    "min_expected_bytes": 4096
+  },
+
+  "behaviour": {
+    "double_click_min_interval_ms": 80,
+    "same_key_min_interval_ms": 100,
+    "peak_share_review_threshold": 0.6,
+    "peak_share_high_threshold": 0.8,
+    "min_events_for_scoring": 25,
+    "coefficient_of_variation_floor": 0.15,
+    "no_recoil_small_move_px": 6,
+    "no_recoil_small_move_share": 0.85
+  },
+
+  "identity": {
+    "weak_fields": ["sign_id1"],
+    "strong_fields": ["monitor_serials", "drive_serials", "physical", "lan_ip", "public_ip"],
+    "min_strong_matches": 2
+  }
+}

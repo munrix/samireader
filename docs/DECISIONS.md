@@ -85,3 +85,53 @@ manual entry? And is round-level timing available, or only match start?
 
 Deliberately excluded from P0: OCR, macro histogram parsing, process reputation lists,
 identity graph, anything requiring a network.
+
+
+---
+
+## Implementation notes
+
+Recorded after building P0, for the decisions that were made in code rather than here.
+
+**Rule packs ship as JSON, not YAML.** PLAN §4 called for YAML. The tool has to run offline
+at a LAN from a bare checkout, and PyYAML is not in the standard library, so the built-in
+pack is JSON and YAML is supported when PyYAML happens to be installed. League overlay packs
+may be either. No capability is lost; the dependency is.
+
+**Schedule timestamps must carry a UTC offset.** A schedule is the reference clock, so an
+ambiguous one is worse than none. Naive timestamps are rejected rather than assumed to be
+local or UTC.
+
+**Match-window margins default to MOSS's own capture cadence.** The last capture is not the
+moment recording stopped — MOSS captures roughly once a minute and randomises around it, so
+a shortfall of under one nominal interval is expected and must not read as an early stop.
+The margin defaults to the nominal interval the archive itself declares, and leagues can set
+it explicitly.
+
+**A clock skew is caught by MOSS's network clock, not by the offset check.** Worth stating
+because the first implementation got it backwards: when a player moves their system clock,
+*everything the OS stamps moves with it* — log-local times, ZIP entry times and the
+filename — so the derived UTC offset still looks valid. What does not move is MOSS's
+network-synced session header. The asymmetry is the detection. An offset that is not a real
+time zone means something else: the log was edited after the fact.
+
+**"Every file verified" is only stated when the file set reconciles too.** A clean bill of
+hash health printed next to a missing-file finding reads as reassurance it has not earned.
+
+**Two finding invariants are enforced in code, not by review.** A `Finding` with no benign
+explanation, or no evidence, raises on construction. This is the no-verdict rule (D1) made
+structural: a finding that cannot be argued with by the accused cannot be rendered.
+
+**The custody log is tamper-evident, not tamper-proof.** Records chain by hash, so removing
+or editing any record but the last leaves a visible break — but anyone who can write the
+file can rewrite it wholly. Documented in `OPERATIONS.md` rather than quietly overclaimed.
+
+**No OCR, and no pixel decoding at all.** Deferred from P0 by design; still the highest-value
+missing capability, because the taskbar clock inside the captures is a genuinely independent
+seventh reference. Decoding attacker-controlled images also carries a native attack surface
+this tool does not currently need.
+
+**The test corpus is synthetic.** The five real archives are personal data and are not in the
+repository, so the fixtures reconstruct the documented grammar instead. The suite therefore
+proves conformance to the documented format, not that the documented format is complete.
+This is stated in the README rather than left for someone to discover.

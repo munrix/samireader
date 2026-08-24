@@ -6,6 +6,13 @@ evidence-linked integrity report — with timestamp reconciliation as the core.
 Read [`RESEARCH.md`](./RESEARCH.md) first; this plan depends on its findings.
 Open questions that could change this plan are in [`QUESTIONS.md`](./QUESTIONS.md).
 
+> **Implementation status.** P0 is built and tested, along with the parts of P1–P3 that need
+> no OCR, no network and no external data: environment and config analysis, blank/duplicate
+> frame detection, and ASCII histogram reconstruction with macro scoring. P2's match-window
+> correlation and team coverage grid are built and take a schedule file. Still unbuilt:
+> taskbar-clock OCR, the cross-archive identity graph, season analytics, and everything in
+> P5. See the roadmap in §5 and the README for what is deliberately excluded.
+
 ---
 
 ## 1. Positioning
@@ -173,12 +180,12 @@ in a resource-capped sandbox.
 
 | Phase | Scope | Outcome |
 |---|---|---|
-| **P0** — 1–2 wks | `mosslib` parser, archive + per-file SHA-256 verification, multi-clock reconciliation, static HTML report, CLI | **Ships against the 5 sample archives.** Already provably valuable. |
-| **P1** | Process/signature, config (`VK_LAYER_*`), blank/duplicate frame detection, taskbar-clock OCR | Tier 2 environment findings |
-| **P2** | Match-window correlation, team coverage grid, multi-player match view | The "dates vs data" product, complete |
-| **P3** | ASCII histogram reconstruction, macro & no-recoil scoring | Tier 3 behavioural |
-| **P4** | Cross-archive identity graph, season analytics, repeat-offender detection | Longitudinal value |
-| **P5** | Web app, case management, Discord submission bot, league integrations | Scale & workflow |
+| **P0** — ✅ done | `mosslib` parser, archive + per-file SHA-256 verification, ZIP structure forensics, multi-clock reconciliation, chain of custody, self-contained HTML report + redacted variant, CLI | Ships. Validated against synthetic archives built from the documented grammar — see README, *Validation*. |
+| **P1** — ✅ mostly | Process/signature, config (`VK_LAYER_*`), blank/duplicate/corrupt frame detection. **Taskbar-clock OCR not built.** | Tier 2 environment findings |
+| **P2** — ✅ done | Match-window correlation, team coverage grid, multi-player match view | The "dates vs data" product, complete |
+| **P3** — ✅ done | ASCII histogram reconstruction, macro & no-recoil scoring against the vendor's own baselines | Tier 3 behavioural |
+| **P4** — not built | Cross-archive identity graph, season analytics, repeat-offender detection | Longitudinal value |
+| **P5** — not built | Web app, case management, Discord submission bot, league integrations | Scale & workflow |
 
 **P0 is deliberately small and completely defensible.** It answers "is this archive
 authentic and does it cover the match?" — which is the question admins cannot currently
@@ -208,7 +215,7 @@ and official match records later.
 | **False accusation of a named player** | Never emit verdicts. Confidence levels. Benign explanation on every finding. Human sign-off required. The `Sign ID1` collision in the samples is the cautionary case. |
 | **Undocumented format drifts across MOSS versions** | Tolerant parser, version detection, golden-file corpus, unknown lines preserved not dropped. |
 | **Cheaters adapt to published rules** | Keep rule packs private; version them; do not publish thresholds. |
-| **`Global log CRC` algorithm unknown** | Per-file SHA-256 verification already works and covers most tampering. Seek vendor confirmation. |
+| **`Global log CRC` algorithm unknown** | Per-file SHA-256 verification already works and covers most tampering. **Built:** the tool now tries 70 candidate algorithm/input combinations against every log it reads and reports the footer as *unverified* when none matches, so the gap is visible rather than implied away. Vendor confirmation still wanted. |
 | **`*` line-prefix semantics unknown** | Do not build a rule on it until confirmed. |
 | **Personal data handling** | Retention policy, access control, redacted sharing variant, documented lawful basis. |
 | **Over-engineering before validation** | P0 ships in two weeks against real archives before any web infrastructure exists. |

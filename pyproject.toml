@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "samireader"
+version = "0.1.0"
+description = "Forensic review layer for MOSS anti-cheat archives: integrity, clocks and evidence dossiers."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "samireader contributors" }]
+keywords = ["moss", "anti-cheat", "forensics", "esports", "integrity"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+  "Topic :: Games/Entertainment",
+]
+dependencies = []
+
+[project.optional-dependencies]
+yaml = ["PyYAML>=6"]
+dev = ["pytest>=8", "ruff>=0.5", "mypy>=1.10"]
+
+[project.scripts]
+sami = "sami.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sami = ["rules/*.json", "report/*.css"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+files = ["src"]
+ignore_missing_imports = true
+warn_unused_ignores = true

@@ -1,0 +1,22 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Never commit archives or anything derived from them: MOSS archives are
+# personal data (docs/RESEARCH.md §8) and reports carry it verbatim.
+*.zip
+demo/
+out/
+cases/
+*.report.html
+*.redacted.html
+custody.jsonl
