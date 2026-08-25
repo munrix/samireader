@@ -93,14 +93,30 @@ class SiteBuildTest(unittest.TestCase):
         cls._tmp.cleanup()
 
     def test_expected_pages_exist(self) -> None:
-        for name in ("index.html", "samples/index.html", "samples/match.html",
+        for name in ("index.html", "about.html", "samples/index.html", "samples/match.html",
                      "docs/index.html", "docs/research.html", "docs/operations.html"):
             self.assertIn(name, self.pages)
 
-    def test_landing_page_states_the_no_verdict_rule(self) -> None:
-        landing = self.pages["index.html"]
-        self.assertIn("never outputs a verdict", landing)
-        self.assertIn("benign explanation", landing)
+    def test_the_app_is_the_site_root(self) -> None:
+        # "/" is the tool itself, not a page about the tool.
+        root = self.pages["index.html"]
+        self.assertIn('id="drop-zone"', root)
+        self.assertIn("app.js", root)
+        for asset in ("app.js", "moss.js", "checks.js", "styles.css", "jszip.min.js", "rules.json"):
+            self.assertTrue((self.out / asset).is_file(), f"{asset} missing from the site")
+
+    def test_the_app_ships_the_same_rule_pack_as_the_cli(self) -> None:
+        import json
+
+        shipped = json.loads((self.out / "rules.json").read_text())
+        source = json.loads((ROOT / "src" / "sami" / "rules" / "default.json").read_text())
+        self.assertEqual(shipped, source, "the app and the CLI must share one rule pack")
+
+    def test_pages_state_the_no_verdict_rule(self) -> None:
+        self.assertIn("never returns a verdict", self.pages["index.html"])
+        about = self.pages["about.html"]
+        self.assertIn("never outputs a verdict", about)
+        self.assertIn("benign explanation", about)
 
     def test_sample_pages_are_labelled_as_synthetic(self) -> None:
         samples = [name for name in self.pages if name.startswith("samples/")]

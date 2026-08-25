@@ -37,6 +37,9 @@ from sami.version import __version__  # noqa: E402
 
 REPO_URL = "https://github.com/munrix/samireader"
 
+WEB = ROOT / "web"
+RULE_PACK = ROOT / "src" / "sami" / "rules" / "default.json"
+
 DOCS = [
     ("index", "Overview", ROOT / "README.md"),
     ("research", "Research", ROOT / "docs" / "RESEARCH.md"),
@@ -50,6 +53,7 @@ DOCS = [
 #: Repository paths that become site pages, so in-document links keep working.
 LINK_MAP = {
     "README.md": "/docs/index.html",
+    "index.html": "/",
     "docs/RESEARCH.md": "/docs/research.html",
     "docs/PLAN.md": "/docs/plan.html",
     "docs/DECISIONS.md": "/docs/decisions.html",
@@ -139,7 +143,8 @@ SITE_CSS = """
 
 def nav(active: str = "") -> str:
     items = [
-        ("/", "Overview"),
+        ("/", "Check an archive"),
+        ("/about.html", "About"),
         ("/samples/", "Sample reports"),
         ("/docs/research.html", "Research"),
         ("/docs/plan.html", "Plan"),
@@ -187,6 +192,19 @@ def rewrite_link(href: str) -> str:
         if href == key or cleaned == key.lstrip("./"):
             return value
     return f"{REPO_URL}/blob/main/{cleaned}"
+
+
+def build_app(out: Path) -> None:
+    """Copy the browser app to the site root and give it the shared rule pack.
+
+    The app and the CLI must never disagree about what counts as suspicious, so
+    both read the same thresholds and name lists: the CLI loads the pack from
+    the package, the app fetches this copy of it.
+    """
+    for source in sorted(WEB.iterdir()):
+        if source.is_file():
+            shutil.copy2(source, out / source.name)
+    shutil.copy2(RULE_PACK, out / "rules.json")
 
 
 def build_docs(out: Path) -> None:
@@ -394,7 +412,10 @@ def main(destination: str = "site", *, verbose: bool = True) -> int:
 
     rows = build_samples(out, work, verbose=verbose)
     build_docs(out)
-    (out / "index.html").write_text(landing(rows), encoding="utf-8")
+    # The app is what people come for, so it owns "/". The project overview
+    # moves to /about.html rather than sitting in front of the tool.
+    (out / "about.html").write_text(landing(rows), encoding="utf-8")
+    build_app(out)
     shutil.rmtree(work, ignore_errors=True)
 
     pages = sorted(p.relative_to(out).as_posix() for p in out.rglob("*.html"))

@@ -23,7 +23,7 @@ check: lint types test  ## everything CI would run
 site:  ## build the static site (landing page, docs, sample reports) into site/
 	$(PY) scripts/build_site.py site
 
-serve: site  ## build the site and serve it locally on :8000
+serve: site  ## build the site and serve the app locally on :8000
 	cd site && $(PY) -m http.server 8000
 
 demo:  ## build a synthetic match and produce reports for it in demo/

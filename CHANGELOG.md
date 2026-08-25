@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 — the browser app
+
+Drop a MOSS `.zip` into the page and it says clean or not, with no AI and no upload.
+
+- `web/` — a dependency-free browser app: JSZip (vendored, no CDN), the log parser ported to
+  plain JS, and the same checks the CLI runs. Files are hashed with WebCrypto in the page, so
+  per-file tamper detection works client-side and nothing leaves the machine.
+- Every finding renders as *what was found* (the measurement), *why that matters* (the rule),
+  and *the innocent explanation* (the same evidence read the other way).
+- The app and the CLI load the **same rule pack**, so thresholds and name lists cannot drift.
+- The app is now the site root; the project overview moved to `/about.html`.
+- `tests/test_webapp.py` drives the page in real Chromium with real archives, asserting the
+  verdicts and that no network request is made during analysis.
+
 ## 0.1.0 — first working release
 
 The P0 scope of [`docs/DECISIONS.md`](docs/DECISIONS.md), plus the parts of P1–P3 that need

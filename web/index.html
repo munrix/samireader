@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>samireader — MOSS archive check</title>
+<meta name="description" content="Drop a MOSS anti-cheat archive in and find out whether it is clean. Runs entirely in your browser.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='14'>🔍</text></svg>">
+<script src="jszip.min.js"></script>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <h1>samireader</h1>
+    <p class="tagline">Drop in a MOSS archive. Find out if it&rsquo;s clean.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card" id="upload-card">
+    <div id="drop-zone" tabindex="0" role="button" aria-label="Choose or drop a MOSS zip archive">
+      <div class="drop-icon">📦</div>
+      <p class="drop-title">Drop the MOSS <code>.zip</code> here</p>
+      <p class="drop-sub">or <button type="button" id="browse-btn">choose a file</button></p>
+      <input type="file" id="file-input" accept=".zip,application/zip" hidden>
+    </div>
+    <p class="privacy">Nothing is uploaded. The archive is read in this page, files are hashed by your browser, and no data leaves your machine.</p>
+  </section>
+
+  <section class="card hidden" id="progress">
+    <div class="spinner" aria-hidden="true"></div>
+    <p id="progress-text">Reading…</p>
+  </section>
+
+  <div id="results" class="hidden"></div>
+</main>
+
+<footer class="wrap foot">
+  <p>Checks hashes, clocks, processes, game config, captures and input timing — all locally, no AI.
+     <a href="docs/index.html">How it works</a> · <a href="https://github.com/munrix/samireader">Source</a></p>
+  <p class="caveat">MOSS records a session; it does not detect cheating. This tool shows evidence for a person to judge. It never returns a verdict.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

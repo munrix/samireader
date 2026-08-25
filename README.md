@@ -4,14 +4,26 @@ Reads MOSS anti-cheat archives and produces a defensible, evidence-linked integr
 report for league admins — with timestamp reconciliation ("do the dates match the data?")
 as the core.
 
-**Status: P0 implemented and tested.** CLI, parser library, analyzers and HTML reporting
-all work end to end. See [Validation](#validation) for what that does and does not prove.
+**Drop a MOSS `.zip` in and it tells you whether it is clean.** If it is not, it says
+exactly what is wrong, how that was measured, and the innocent explanation for the same
+evidence.
+
+**→ [samireader.vercel.app](https://samireader.vercel.app)**
+
+Nothing is uploaded. The archive is read in the page, every file is hashed by your browser's
+own crypto, and the checks are plain arithmetic and string matching. **No AI, no API keys, no
+network calls** — it works offline at a LAN.
+
+The same checks are also available as a CLI for batch work:
 
 ```bash
 sami verify  match/*.zip --schedule match.json      # answer, in the terminal, exit code set
 sami report  player.zip -o case.html --redacted     # the case document, plus a shareable copy
 sami match   match/*.zip --schedule match.json -o out/   # ten players, one coverage grid
 ```
+
+Both read the **same rule pack**, so the browser and the CLI can never disagree about what
+counts as suspicious.
 
 ---
 
@@ -36,7 +48,24 @@ explanation, or no evidence, raises rather than rendering.
 
 ---
 
-## Install
+## The browser app
+
+```
+web/index.html   the page
+web/moss.js      the log parser
+web/checks.js    the rules — one function per check, each returning what/why/benign
+web/styles.css   styling
+web/jszip.min.js vendored, so there is no CDN to depend on
+```
+
+No build step, no framework, no npm. Open `web/index.html` over http (a file:// page cannot
+use `crypto.subtle`), or run `make serve` and visit <http://localhost:8000>.
+
+It is driven in real Chromium by `tests/test_webapp.py`: a synthetic archive goes in through
+the file input, and the test reads the verdict back off the rendered page — including a check
+that the page makes no network request while analysing.
+
+## Install the CLI
 
 No dependencies. Python 3.10+.
 
@@ -172,18 +201,18 @@ docs/            research, plan, decisions, open questions, operations
 ## Development
 
 ```bash
-python3 -m unittest discover -s tests -t .   # 129 tests, no network, no fixtures on disk
+python3 -m unittest discover -s tests -t .   # 142 tests, incl. real-browser end-to-end
 ruff check src tests scripts && mypy src
 make check                                   # all of the above
 make demo                                    # build a synthetic match and report on it
-make serve                                   # build the docs site and serve it on :8000
+make serve                                   # build the site and serve the app on :8000
 ```
 
 ## The site
 
-`scripts/build_site.py` builds a static site — landing page, the documents in `docs/`
-rendered to HTML, and **live sample reports produced by running the real tool over synthetic
-archives**. There is no server and no framework: the output directory is the site, the same
+`scripts/build_site.py` builds the deployed site: the **app at `/`**, the project overview at
+`/about.html`, the documents in `docs/` rendered to HTML, and **live sample reports produced
+by running the real tool over synthetic archives**. There is no server and no framework: the output directory is the site, the same
 way the report file is the case document. `vercel.json` builds it on deploy; any static host
 or a USB stick at a LAN works the same way.
 
